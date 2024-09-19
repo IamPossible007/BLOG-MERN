@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",
-    "firebase": "^10.7.1",
+    "firebase": "^10.13.1",
     "flowbite-react": "^0.7.0",
     "moment": "^2.29.4",
     "react": "^18.2.0",
