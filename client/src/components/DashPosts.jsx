@@ -1,4 +1,4 @@
-import { Modal, Table, Button } from 'flowbite-react';
+import { Modal, Table, Button, Spinner } from 'flowbite-react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -10,10 +10,12 @@ export default function DashPosts() {
   const [showMore, setShowMore] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [postIdToDelete, setPostIdToDelete] = useState('');
-  
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setLoading(true); // Start loading
         const res = await fetch(`/api/post/getposts?userId=${currentUser._id}`);
         const data = await res.json();
         if (res.ok) {
@@ -24,6 +26,8 @@ export default function DashPosts() {
         }
       } catch (error) {
         console.log(error.message);
+      } finally {
+        setLoading(false); // Stop loading
       }
     };
     if (currentUser.isAdmin) {
@@ -73,10 +77,12 @@ export default function DashPosts() {
 
   return (
     <div className='container mx-auto px-4'>
-      {/* Add margin here to separate from the header */}
-      {currentUser.isAdmin && userPosts.length > 0 ? (
+      {loading ? (
+        <div className='flex justify-center items-center min-h-screen'>
+          <Spinner size='xl' />
+        </div>
+      ) : currentUser.isAdmin && userPosts.length > 0 ? (
         <>
-          {/* Added 'mt-6' to create margin-top */}
           <Table hoverable className='w-full shadow-md mt-6'>
             <Table.Head>
               <Table.HeadCell>Date updated</Table.HeadCell>
